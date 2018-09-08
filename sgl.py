@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import scipy
+import scipy.interpolate
+import scipy.linalg
 
 def _interpolate_potential(para):
-    potential = np.interp(np.linspace(para['xMin'], para['xMax'], para['nPoints']), para['interpolation_points_x'], para['interpolation_points_y'])
+    if para['interpolation_type']=='linear':
+        interpolation_fun = scipy.interpolate.interp1d(para['interpolation_points_x'], para['interpolation_points_y'])
+        xaxis=np.linspace(para['xMin'],para['xMax'],para['nPoints'])
+        potential=interpolation_fun(xaxis)
+    elif para['interpolation_type']=='cspline':
+        interpolation_fun = scipy.interpolate.CubicSpline(para['interpolation_points_x'], para['interpolation_points_y'])
+        xaxis=np.linspace(para['xMin'],para['xMax'],para['nPoints'])
+        potential=interpolation_fun(xaxis)
+    elif para['interpolation_type']=='polynomial':
+        print('not yet implemented')
     return potential
 
 def _write_hamiltonian(para):
@@ -17,5 +27,5 @@ def _write_hamiltonian(para):
 
 def solve_hamiltonian(para):
     [hamiltonian_diag, hamiltonian_offdiag] =_write_hamiltonian(para)
-    test=scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag)
-    return test
+    eigenvalues, eigenvectors=scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag,False,'v',(para['first_eigenvalue'],para['last_eigenvalue']))
+    return eigenvalues, eigenvectors
