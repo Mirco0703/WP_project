@@ -4,7 +4,7 @@ Routines for reading and writing the necessary file in- and output.
 """
 import numpy as np
 
-def read_schrodinger_inp(folder=''):
+def read_schrodinger_inp(folder='./iodata/finite_well_pot/'):
     """Reading input file schrodinger.inp
 
     Args:
@@ -27,6 +27,11 @@ def read_schrodinger_inp(folder=''):
     para['interpolation_type'] = string.split()[0]
     string = fp.readline()
     para['interpolation_points_number'] = int(string.split()[0])
-    para['interpolation_points_x'] = np.genfromtxt('schrodinger.inp', skip_header=5)[:, 0]
-    para['interpolation_points_y'] = np.genfromtxt('schrodinger.inp', skip_header=5)[:, 1]  
+    para['interpolation_points_x'] = np.genfromtxt(folder+'schrodinger.inp', skip_header=5)[:, 0]
+    para['interpolation_points_y'] = np.genfromtxt(folder+'schrodinger.inp', skip_header=5)[:, 1]
     return para
+
+
+def write_pot_data(x, y, fname):
+    data = np.array([x, y]).T
+    np.savetxt(fname, data)

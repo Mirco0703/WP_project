@@ -3,6 +3,7 @@
 import numpy as np
 import scipy.interpolate
 import scipy.linalg
+import iomodul
 
 def _interpolate_potential(para):
     if para['interpolation_type']=='linear':
@@ -15,6 +16,9 @@ def _interpolate_potential(para):
         potential=interpolation_fun(xaxis)
     elif para['interpolation_type']=='polynomial':
         print('not yet implemented')
+    xpot = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
+    iomodul.write_pot_data(xpot, potential,
+                           './iodata/finite_well_pot/potential.dat')
     return potential
 
 def _write_hamiltonian(para):
