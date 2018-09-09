@@ -85,7 +85,7 @@ def solve_hamiltonian(para):
             eigenvectors: linewise the corresponding, normed eigenvectors
     """
     hamiltonian_diag, hamiltonian_offdiag = _write_hamiltonian(para)
-    eigenvalues, eigenvectors = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'v', (para['first_eigenvalue']-1, para['last_eigenvalue']))
+    eigenvalues, eigenvectors = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'i', (para['first_eigenvalue']-1, para['last_eigenvalue']-1))
     eigenvectors = _norm_eigenvectors(eigenvectors, para)
     iomodul.write_eigenvalues(eigenvalues, para)
     xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])

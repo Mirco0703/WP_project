@@ -4,7 +4,7 @@ Routines for reading and writing the necessary file in- and output.
 """
 import numpy as np
 
-def read_schrodinger_inp(directory='./iodata/infinite_well_pot/'):
+def read_schrodinger_inp(directory='.'):
     """Reading input file schrodinger.inp
 
     Args:
