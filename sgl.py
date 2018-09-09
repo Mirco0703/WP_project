@@ -70,7 +70,7 @@ def expectation_values(para, eigenvectors):
         expval[ii] = delta*np.sum(eigenvectors[1:-1, ii]**2*x_i)
         expval_squared[ii] = delta*np.sum(eigenvectors[1:-1, ii]**2*x_i**2)
         uncertainty[ii] = np.sqrt(expval_squared[ii]-expval[ii]**2)
-    return expval, uncertainty
+    iomodul.write_expectation_values(expval, uncertainty, para)
 
 def solve_hamiltonian(para):
     """
@@ -87,7 +87,7 @@ def solve_hamiltonian(para):
     hamiltonian_diag, hamiltonian_offdiag = _write_hamiltonian(para)
     eigenvalues, eigenvectors = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'v', (para['first_eigenvalue']-1, para['last_eigenvalue']))
     eigenvectors = _norm_eigenvectors(eigenvectors, para)
-        iomodul.write_eigenvalues(eigenvalues, para)
+    iomodul.write_eigenvalues(eigenvalues, para)
     xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
     iomodul.write_eigenvectors(eigenvectors, xaxis, para)
     return eigenvalues, eigenvectors

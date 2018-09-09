@@ -36,11 +36,15 @@ def read_schrodinger_inp(directory='./iodata/infinite_well_pot/'):
 def write_potential(xpot, potential, para):
     data = np.array([xpot, potential]).T
     np.savetxt(para['directory']+'potential.dat', data)
-    
+
 def write_eigenvalues(eigenvalues, para):
     np.savetxt(para['directory']+'energies.dat', eigenvalues.T)
-    
+
 def write_eigenvectors(eigenvectors, xaxis, para):
-    data = np.array([eigenvectors])
-    print(data.shape)
+    xaxis = np.reshape(xaxis, (xaxis.size, 1))
+    data = np.hstack((xaxis, eigenvectors))
     np.savetxt(para['directory']+'wavefuncs.dat', data)
+
+def write_expectation_values(expval, uncertainty, para):
+    data = np.array([expval, uncertainty]).T
+    np.savetxt(para['directory']+'expvalues.dat', data)

@@ -10,8 +10,8 @@ import sgl
 
 def main():
     parser = argparse.ArgumentParser(description='Solving 1-d SGL')
-    msg = 'Directory (default: .)'
-    parser.add_argument('-d', '--directory', default='.', help=msg)
+    msg = 'Directory (default: ./iodata/infinite_well_pot/)'
+    parser.add_argument('-d', '--directory', default='./iodata/infinite_well_pot/', help=msg)
     args = parser.parse_args()
     para = iomodul.read_schrodinger_inp(args.directory)
     eigenvalues, eigenvectors = sgl.solve_hamiltonian(para)
