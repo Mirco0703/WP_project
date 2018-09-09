@@ -4,16 +4,17 @@ Routines for reading and writing the necessary file in- and output.
 """
 import numpy as np
 
-def read_schrodinger_inp(folder=''):
+def read_schrodinger_inp(directory='./iodata/infinite_well_pot/'):
     """Reading input file schrodinger.inp
 
     Args:
-        folder: folder in which schrodinger.inp is
+        directory: directory in which schrodinger.inp is
     Returns:
-        parameters of schrodinger.inp in a beautiful dictionary
+        para: parameters of schrodinger.inp in a beautiful dictionary
     """
     para = {}
-    fp = open(folder+'schrodinger.inp', 'r')
+    para['directory'] = directory
+    fp = open(directory+'schrodinger.inp', 'r')
     string = fp.readline()
     para['mass'] = float(string.split()[0])
     string = fp.readline()
@@ -27,6 +28,19 @@ def read_schrodinger_inp(folder=''):
     para['interpolation_type'] = string.split()[0]
     string = fp.readline()
     para['interpolation_points_number'] = int(string.split()[0])
-    para['interpolation_points_x'] = np.genfromtxt('schrodinger.inp', skip_header=5)[:, 0]
-    para['interpolation_points_y'] = np.genfromtxt('schrodinger.inp', skip_header=5)[:, 1]  
+    para['interpolation_points_x'] = np.genfromtxt(directory+'schrodinger.inp', skip_header=5)[:, 0]
+    para['interpolation_points_y'] = np.genfromtxt(directory+'schrodinger.inp', skip_header=5)[:, 1]
     return para
+
+
+def write_potential(xpot, potential, para):
+    data = np.array([xpot, potential]).T
+    np.savetxt(para['directory']+'potential.dat', data)
+    
+def write_eigenvalues(eigenvalues, para):
+    np.savetxt(para['directory']+'energies.dat', eigenvalues.T)
+    
+def write_eigenvectors(eigenvectors, xaxis, para):
+    data = np.array([eigenvectors])
+    print(data.shape)
+    np.savetxt(para['directory']+'wavefuncs.dat', data)

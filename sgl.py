@@ -13,6 +13,7 @@ Routines for solving the 1-d time-independant schrodinger equation
 import numpy as np
 import scipy.interpolate
 import scipy.linalg
+import iomodul
 
 def _interpolate_potential(para):
     x_points = para['interpolation_points_x']
@@ -26,6 +27,7 @@ def _interpolate_potential(para):
         potential = interpolation_fun(xaxis)
     elif para['interpolation_type'] == 'polynomial':
         print('not yet implemented')
+    iomodul.write_potential(xaxis, potential, para)
     return potential
 
 def _write_hamiltonian(para):
@@ -85,4 +87,7 @@ def solve_hamiltonian(para):
     hamiltonian_diag, hamiltonian_offdiag = _write_hamiltonian(para)
     eigenvalues, eigenvectors = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'v', (para['first_eigenvalue']-1, para['last_eigenvalue']))
     eigenvectors = _norm_eigenvectors(eigenvectors, para)
+        iomodul.write_eigenvalues(eigenvalues, para)
+    xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
+    iomodul.write_eigenvectors(eigenvectors, xaxis, para)
     return eigenvalues, eigenvectors
