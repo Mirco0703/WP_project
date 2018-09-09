@@ -48,3 +48,9 @@ def write_eigenvectors(eigenvectors, xaxis, para):
 def write_expectation_values(expval, uncertainty, para):
     data = np.array([expval, uncertainty]).T
     np.savetxt(para['directory']+'expvalues.dat', data)
+
+def read_potential(directory):
+    data = np.loadtxt(directory+'potential.dat')
+    xaxis = data[:, 0]
+    potential = data[:, 1]
+    return xaxis, potential
