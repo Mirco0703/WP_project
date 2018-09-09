@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
-import iomodul
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+import iomodul
 
 def plot_sgl_solution(directory='.', scaling=1.0):
     xaxis, potential = iomodul.read_potential(directory)
     eigenvalues = iomodul.read_eigenvalues(directory)
     eigenvectors = iomodul.read_eigenvectors(directory)[1]
     expval, uncertainty = iomodul.read_expectation_values(directory)
-    
+    fig_handle = plt.figure()
     plt.subplot(1, 2, 1)
     plt.plot(xaxis, potential, 'k')
     xmin = np.min(xaxis)*1.1
     xmax = np.max(xaxis)*1.1
     plt.hlines(eigenvalues, xmin, xmax, 'tab:grey')
-    for ii in range(0,eigenvalues.size):
+    for ii in range(0, eigenvalues.size):
         plt.plot(xaxis, eigenvectors[:, ii]*scaling+ eigenvalues[ii], color=(ii%2, 0, 1-ii%2))
     plt.plot(expval, eigenvalues, 'gx')
     plt.xlim(xmin, xmax)
@@ -23,7 +23,6 @@ def plot_sgl_solution(directory='.', scaling=1.0):
     plt.title(r'Potential, eigenstates, $\langle x \rangle$')
     plt.xlabel('x [Bohr]')
     plt.ylabel('Energy [Hartree]')
-    
     plt.subplot(1, 2, 2)
     xmin = 0
     xmax = np.max(uncertainty)*1.1
@@ -34,5 +33,11 @@ def plot_sgl_solution(directory='.', scaling=1.0):
     plt.title(r'$\sigma_x$')
     plt.xlabel('[Bohr]')
     plt.gca().axes.get_yaxis().set_visible(False)
-    plt.show()
+    return fig_handle
+
+def print_plot(location='screen', directory='.', fig_handle=None):
+    if location == 'screen':
+        plt.show()
+    elif location == 'pdf':
+        fig_handle.savefig(directory+'plot.pdf', bbox_inches='tight')
     
