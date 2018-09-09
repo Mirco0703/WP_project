@@ -54,3 +54,19 @@ def read_potential(directory):
     xaxis = data[:, 0]
     potential = data[:, 1]
     return xaxis, potential
+
+def read_eigenvalues(directory):
+    eigenvalues = np.loadtxt(directory+'energies.dat')
+    return eigenvalues
+
+def read_eigenvectors(directory):
+    data = np.loadtxt(directory+'wavefuncs.dat')
+    xaxis = data[:, 0]
+    eigenvectors = data[:, 1:]
+    return xaxis, eigenvectors
+
+def read_expectation_values(directory):
+    data = np.loadtxt(directory+'expvalues.dat')
+    expval = data[:, 0]
+    uncertainty = data[:, 1]
+    return expval, uncertainty
