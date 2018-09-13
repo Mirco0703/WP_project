@@ -21,12 +21,13 @@ def _interpolate_potential(para):
     xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
     if para['interpolation_type'] == 'linear':
         interpolation_fun = scipy.interpolate.interp1d(x_points, y_points)
-        potential = interpolation_fun(xaxis)
     elif para['interpolation_type'] == 'cspline':
         interpolation_fun = scipy.interpolate.CubicSpline(x_points, y_points)
-        potential = interpolation_fun(xaxis)
     elif para['interpolation_type'] == 'polynomial':
-        print('not yet implemented')
+        fun_args = np.polyfit(x_points, y_points,
+                              para['interpolation_points_number']-1)
+        interpolation_fun = np.poly1d(fun_args)
+    potential = interpolation_fun(xaxis)
     iomodul.write_potential(xaxis, potential, para)
     return potential
 
@@ -85,7 +86,9 @@ def solve_hamiltonian(para):
             eigenvectors: linewise the corresponding, normed eigenvectors
     """
     hamiltonian_diag, hamiltonian_offdiag = _write_hamiltonian(para)
-    eigenvalues, eigenvectors = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'i', (para['first_eigenvalue']-1, para['last_eigenvalue']-1))
+    catcher = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'i',
+                                            (para['first_eigenvalue']-1, para['last_eigenvalue']-1))
+    eigenvalues, eigenvectors = catcher    # only to shorten the line above
     eigenvectors = _norm_eigenvectors(eigenvectors, para)
     iomodul.write_eigenvalues(eigenvalues, para)
     xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
