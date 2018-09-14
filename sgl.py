@@ -15,7 +15,18 @@ import scipy.interpolate
 import scipy.linalg
 import iomodul
 
-def _interpolate_potential(para):
+def interpolate_potential(para):
+    """
+    Interpolates the potential using 3 different methods: linear, natural cubic
+    splines and polynomial fit, and calls the corresponding write function
+
+        Args:
+            para:dictionary, written by iomodul.read_schrodinger_inp(),
+                 containing all relevant parameters
+
+        Returns:
+            potential: array with all potential values V(x)
+    """
     x_points = para['interpolation_points_x']
     y_points = para['interpolation_points_y']
     xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
@@ -32,7 +43,7 @@ def _interpolate_potential(para):
     return potential
 
 def _write_hamiltonian(para):
-    potential = _interpolate_potential(para)
+    potential = interpolate_potential(para)
     delta = np.abs(para['xMax']-para['xMin'])/para['nPoints']
     para['Delta'] = delta
     aa = 1/(para['mass']*delta**2)

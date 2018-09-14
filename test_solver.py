@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+Functions for pytest, testing potential and energies for the 6 given examples
+"""
 
+import numpy as np
 import pytest
 import iomodul
 import sgl
-import numpy as np
+
 
 TESTNAMES = ['infinite_well_pot', 'finite_well_pot', 'harmonic_pot', 'asym_pot',
              'double_pot_lin', 'double_pot_cspline']
@@ -16,13 +20,12 @@ def test_potential(testname):
     loc = './iodata/' + testname + '/'
     ref_pot = np.loadtxt(loc+'reference_potential.dat')[:, 1]
     para = iomodul.read_schrodinger_inp(loc)
-    test_pot = sgl._interpolate_potential(para)
+    test_pot = sgl.interpolate_potential(para)
     assert np.all(ref_pot - test_pot < 1e-10)
 
 @pytest.mark.parametrize("testname", TESTNAMES)
-def test_energies(testname):
-    """Simple testing function for the eigenvalues of
-    the infinite well potential."""
+def test_eigenvalues(testname):
+    """Simple testing function for the eigenvalues."""
     print('\nTest eigenvalues')
     loc = './iodata/' + testname + '/'
     ref_energies = np.loadtxt(loc+'reference_energies.dat')
