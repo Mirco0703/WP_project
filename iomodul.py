@@ -14,22 +14,30 @@ def read_schrodinger_inp(directory='.'):
     """
     para = {}
     para['directory'] = directory
-    fp = open(directory+'schrodinger.inp', 'r')
-    string = fp.readline()
-    para['mass'] = float(string.split()[0])
-    string = fp.readline()
-    para['xMin'] = float(string.split()[0])
-    para['xMax'] = float(string.split()[1])
-    para['nPoints'] = int(string.split()[2])
-    string = fp.readline()
-    para['first_eigenvalue'] = int(string.split()[0])
-    para['last_eigenvalue'] = int(string.split()[1])
-    string = fp.readline()
-    para['interpolation_type'] = string.split()[0]
-    string = fp.readline()
-    para['interpolation_points_number'] = int(string.split()[0])
-    para['interpolation_points_x'] = np.genfromtxt(directory+'schrodinger.inp', skip_header=5)[:, 0]
-    para['interpolation_points_y'] = np.genfromtxt(directory+'schrodinger.inp', skip_header=5)[:, 1]
+    try:
+        fp = open(directory+'schrodinger.inp', 'r')
+    except OSError:
+        print('Could not open file!')
+        print('schrodinger.inp not found in given directory or no permission to read it given!')
+        para = None
+    else:
+        para = {}
+        para['directory'] = directory
+        string = fp.readline()
+        para['mass'] = float(string.split()[0])
+        string = fp.readline()
+        para['xMin'] = float(string.split()[0])
+        para['xMax'] = float(string.split()[1])
+        para['nPoints'] = int(string.split()[2])
+        string = fp.readline()
+        para['first_eigenvalue'] = int(string.split()[0])
+        para['last_eigenvalue'] = int(string.split()[1])
+        string = fp.readline()
+        para['interpolation_type'] = string.split()[0]
+        string = fp.readline()
+        para['interpolation_points_number'] = int(string.split()[0])
+        para['interpolation_points_x'] = np.genfromtxt(directory+'schrodinger.inp', skip_header=5)[:, 0]
+        para['interpolation_points_y'] = np.genfromtxt(directory+'schrodinger.inp', skip_header=5)[:, 1]
     return para
 
 
