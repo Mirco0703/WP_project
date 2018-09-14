@@ -1,6 +1,7 @@
 .spyproject
+.pytest_cache/
 __pycache__/
-*/energies.dat
-*/expvalues.dat
-*/potential.dat
-*/wavefuncs.dat
+*/*/energies.dat
+*/*/expvalues.dat
+*/*/potential.dat
+*/*/wavefuncs.dat
