@@ -22,7 +22,7 @@ def _interpolate_potential(para):
     if para['interpolation_type'] == 'linear':
         interpolation_fun = scipy.interpolate.interp1d(x_points, y_points)
     elif para['interpolation_type'] == 'cspline':
-        interpolation_fun = scipy.interpolate.CubicSpline(x_points, y_points)
+        interpolation_fun = scipy.interpolate.CubicSpline(x_points, y_points, bc_type='natural')
     elif para['interpolation_type'] == 'polynomial':
         fun_args = np.polyfit(x_points, y_points,
                               para['interpolation_points_number']-1)
