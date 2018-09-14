@@ -1,3 +1,6 @@
 .spyproject
 __pycache__/
-iodata/
+*/energies.dat
+*/expvalues.dat
+*/potential.dat
+*/wavefuncs.dat
