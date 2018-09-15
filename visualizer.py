@@ -23,6 +23,8 @@ def main():
     msg = 'Print to "screen" or "pdf" (default: ''screen'')'
     parser.add_argument('-p', '--printto', default='screen', help=msg)
     args = parser.parse_args()
+    if args.directory[-1] != '/':    # users like us tend to forget the last /
+        args.directory += '/'
     fig_handle = plotmodul.plot_sgl_solution(args.directory,
                                              float(args.scaling))
     plotmodul.print_plot(args.printto, args.directory, fig_handle)

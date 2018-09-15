@@ -16,8 +16,6 @@ def read_schrodinger_inp(directory='.'):
     Returns:
         para: parameters of schrodinger.inp in a beautiful dictionary
     """
-    if directory[-1] != '/':    # users like us tend to forget the last /
-        directory += '/'
     try:
         fp = open(directory+'schrodinger.inp', 'r')
     except OSError:

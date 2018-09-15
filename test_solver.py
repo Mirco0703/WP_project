@@ -28,7 +28,7 @@ def test_potential(testname):
             testname: directory with schrodinger.inp and the reference files
     """
     print("\nTest potential")
-    loc = './iodata/' + testname + '/'
+    loc = './examples/' + testname + '/'
     ref_pot = np.loadtxt(loc+'reference_potential.dat')[:, 1]
     para = iomodul.read_schrodinger_inp(loc)
     test_pot = sgl.interpolate_potential(para)
@@ -44,7 +44,7 @@ def test_eigenvalues(testname):
             testname: directory with schrodinger.inp and the reference files
     """
     print('\nTest eigenvalues')
-    loc = './iodata/' + testname + '/'
+    loc = './examples/' + testname + '/'
     ref_energies = np.loadtxt(loc+'reference_energies.dat')
     para = iomodul.read_schrodinger_inp(loc)
     test_energies = sgl.solve_hamiltonian(para)[0]

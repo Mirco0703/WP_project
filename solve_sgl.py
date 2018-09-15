@@ -21,6 +21,8 @@ def main():
     msg = 'Directory (default: .)'
     parser.add_argument('-d', '--directory', default='.', help=msg)
     args = parser.parse_args()
+    if args.directory[-1] != '/':    # users like us tend to forget the last /
+        args.directory += '/'
     para = iomodul.read_schrodinger_inp(args.directory)
     eigenvectors = sgl.solve_hamiltonian(para)[1]
     sgl.expectation_values(para, eigenvectors)
