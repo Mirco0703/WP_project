@@ -15,6 +15,7 @@ import scipy.interpolate
 import scipy.linalg
 import iomodul
 
+
 def interpolate_potential(para):
     """
     Interpolates the potential using 3 different methods: linear, natural cubic
@@ -39,8 +40,9 @@ def interpolate_potential(para):
                               para['interpolation_points_number']-1)
         interpolation_fun = np.poly1d(fun_args)
     potential = interpolation_fun(xaxis)
-    iomodul.write_potential(xaxis, potential, para)
+    iomodul.write_potential(xaxis, potential, para['directory'])
     return potential
+
 
 def _write_hamiltonian(para):
     potential = interpolate_potential(para)
@@ -51,11 +53,13 @@ def _write_hamiltonian(para):
     hamiltonian_offdiag = -aa/2*np.ones(para['nPoints']-1)
     return hamiltonian_diag, hamiltonian_offdiag
 
+
 def _norm_eigenvectors(eigenvectors, para):
     for ii in range(np.size(eigenvectors[0])):
         eigenvector_norm = para['Delta']*sum(np.abs(eigenvectors[1:-1, ii])**2)
         eigenvectors[:, ii] = eigenvectors[:, ii]/np.sqrt(eigenvector_norm)
     return eigenvectors
+
 
 def expectation_values(para, eigenvectors):
     """
@@ -73,6 +77,7 @@ def expectation_values(para, eigenvectors):
                     for each eigenvector
             uncertainty: corresponding position uncertainty
     """
+
     expval = np.zeros(np.size(eigenvectors[0]))
     expval_squared = np.zeros(np.size(eigenvectors[0]))
     uncertainty = np.zeros(np.size(eigenvectors[0]))
@@ -82,7 +87,8 @@ def expectation_values(para, eigenvectors):
         expval[ii] = delta*np.sum(eigenvectors[1:-1, ii]**2*x_i)
         expval_squared[ii] = delta*np.sum(eigenvectors[1:-1, ii]**2*x_i**2)
         uncertainty[ii] = np.sqrt(expval_squared[ii]-expval[ii]**2)
-    iomodul.write_expectation_values(expval, uncertainty, para)
+    iomodul.write_expectation_values(expval, uncertainty, para['directory'])
+
 
 def solve_hamiltonian(para):
     """
@@ -93,15 +99,18 @@ def solve_hamiltonian(para):
                   containing all relevant parameters
 
         Returns:
-            eigenvalues:  Array with the selected eigenvalues of the hamiltonian
+            eigenvalues:  Array with the selected eigenvalues
             eigenvectors: linewise the corresponding, normed eigenvectors
     """
     hamiltonian_diag, hamiltonian_offdiag = _write_hamiltonian(para)
-    catcher = scipy.linalg.eigh_tridiagonal(hamiltonian_diag, hamiltonian_offdiag, False, 'i',
-                                            (para['first_eigenvalue']-1, para['last_eigenvalue']-1))
-    eigenvalues, eigenvectors = catcher    # only to shorten the line above
+    # first and last eigenvalue -1 because python arrays start at 0, human ones at 1
+    eigenvalues, eigenvectors = scipy.linalg.eigh_tridiagonal(hamiltonian_diag,
+                                                              hamiltonian_offdiag,
+                                                              False, 'i',
+                                                              (para['first_eigenvalue']-1,
+                                                               para['last_eigenvalue']-1))
     eigenvectors = _norm_eigenvectors(eigenvectors, para)
-    iomodul.write_eigenvalues(eigenvalues, para)
+    iomodul.write_eigenvalues(eigenvalues, para['directory'])
     xaxis = np.linspace(para['xMin'], para['xMax'], para['nPoints'])
-    iomodul.write_eigenvectors(eigenvectors, xaxis, para)
+    iomodul.write_eigenvectors(eigenvectors, xaxis, para['directory'])
     return eigenvalues, eigenvectors
