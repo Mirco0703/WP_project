@@ -3,6 +3,5 @@
 """
 Created on Fri Sep 14 14:43:55 2018
 
-@author: mirco
+@author: Mirco Hellwig, Joshua Schmidt
 """
-

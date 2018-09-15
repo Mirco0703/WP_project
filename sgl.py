@@ -2,13 +2,7 @@
 """
 Routines for solving the 1-d time-independant schrodinger equation
 
-    solve_hamiltonian(para):
-        interpolates the potential, writes the hamiltonian and solves it,
-        returning eigenvalues and -vectors
-    expectation_values(para, eigenvalues)
-        using the by solve_hamiltonian() calculated eigenvectors to
-        calculate the expectation value of the position operator and the
-        position uncertainty
+@author: Mirco Hellwig, Joshua Schmidt
 """
 import numpy as np
 import scipy.interpolate
@@ -63,21 +57,19 @@ def _norm_eigenvectors(eigenvectors, para):
 
 def expectation_values(para, eigenvectors):
     """
-    Calculating expectation values of position operator and position
-    uncertainty
+    Calculating expectation values of position operator and position uncertainty
 
         Args:
-            para:dictionary, written by iomodul.read_schrodinger_inp(),
-                 containing all relevant parameters
-            eigenvectors: eigenvectors of the hamiltonian, given by
+            para: dictionary, written by iomodul.read_schrodinger_inp(), \
+                  containing all relevant parameters
+            eigenvectors: eigenvectors of the hamiltonian, given by \
                           solve_hamiltonian()
 
         Returns:
-            expval: array with the expectation values of the position operator
+            expval: array with the expectation values of the position operator \
                     for each eigenvector
             uncertainty: corresponding position uncertainty
     """
-
     expval = np.zeros(np.size(eigenvectors[0]))
     expval_squared = np.zeros(np.size(eigenvectors[0]))
     uncertainty = np.zeros(np.size(eigenvectors[0]))

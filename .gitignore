@@ -6,4 +6,5 @@ __pycache__/
 */*/potential.dat
 */*/wavefuncs.dat
 */*/plot.pdf
+docs/_build
 
